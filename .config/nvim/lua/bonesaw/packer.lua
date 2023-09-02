@@ -15,6 +15,5 @@ return require('packer').startup(function(use)
 
   use {
   	'folke/tokyonight.nvim',	
-	vim.cmd[[colorscheme tokyonight]],
   }
 end)
