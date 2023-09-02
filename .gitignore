@@ -9,5 +9,7 @@
 !README.md
 
 # neovim
-!.config/
-!.config/nvim/
+!/.config
+/.config/*
+!/.config/nvim/
+/.config/nvim/plugin/packer_compiled.lua
