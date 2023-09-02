@@ -10,4 +10,4 @@ cp ~/.wezterm.lua .
 cp ~/.config/i3/* .
 
 # update neovim
-cp ~/.config/nvim/ .
+cp -r ~/.config/nvim/ .
