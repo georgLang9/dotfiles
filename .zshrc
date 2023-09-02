@@ -87,6 +87,7 @@ plugins=(
   fast-syntax-highlighting
   zsh-autocomplete
   z
+  sudo
 )
 
 source $ZSH/oh-my-zsh.sh
