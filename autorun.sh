@@ -34,5 +34,3 @@ pacman -S fd
 cp ./.config/nvim/* ~/
 
 #=====================================================
-# Install i3-wm
-pacman -S i3-wm
