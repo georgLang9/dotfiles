@@ -1,0 +1,13 @@
+# exclude everything
+/*
+
+# Except
+
+# git
+!.gitignore
+!.gitconfig
+!README.md
+
+# neovim
+!.config/
+!.config/nvim/
