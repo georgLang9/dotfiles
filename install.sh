@@ -48,6 +48,8 @@ while [ $# -gt 0 ]; do
 	shift
 done
 
+USER=$(who)
+
 # Function to display usage information
 usage() {
 	echo "Usage: $0 [-i | --install] [-h | --help] [component1] [component2] ..."
@@ -74,7 +76,7 @@ install_zsh() {
 	sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 	git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
 
-	cp ./.zshrc ~/
+	cp ./.zshrc /home/$USER/
 }
 
 #=====================================================
@@ -82,7 +84,7 @@ install_zsh() {
 install_wezterm() {
 	echo "Installing wezterm..."
 	pacman -S wezterm
-	cp ./.wezterm.lua ~/
+	cp ./.wezterm.lua /home/$USER/
 }
 
 #=====================================================
@@ -92,22 +94,22 @@ install_neovim() {
 	pacman -S neovim
 
 	# required
-	rm ~/.config/nvim{,.bak}
+	rm /home/$USER/.config/nvim{,.bak}
 
 	# optional but recommended
-	rm ~/.local/share/nvim{,.bak}
-	rm ~/.local/state/nvim{,.bak}
-	rm ~/.cache/nvim{,.bak}
+	rm /home/$USER/.local/share/nvim{,.bak}
+	rm /home/$USER/.local/state/nvim{,.bak}
+	rm /home/$USER/.cache/nvim{,.bak}
 
-	rm -rf ~/.config/nvim/.git
+	rm -rf /home/$USER/.config/nvim/.git
 	pacman -S lazygit
 
 	# for telescope:
 	pacman -S ripgrep fd
 
 	echo "Installing lazyvim..."
-	git clone https://github.com/LazyVim/starter ~/.config/nvim
-	cp -r ./.config/nvim/* ~/
+	git clone https://github.com/LazyVim/starter /home/$USER/.config/nvim
+	cp -r ./.config/nvim/* /home/$USER/
 }
 
 #=====================================================
@@ -130,11 +132,11 @@ install_dEmacs() {
 	echo "Installing doom emacs"
 	pacman -S emacs
 
-	git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.config/emacs
-	~/.config/emacs/bin/doom install
+	git clone --depth 1 https://github.com/doomemacs/doomemacs /home/$USER/.config/emacs
+	/home/$USER/.config/emacs/bin/doom install
 
-	mkdir ~/.config/autostart/
-	cp ./emacs.desktop ~/.config/autostart/.
+	mkdir /home/$USER/.config/autostart/
+	cp ./emacs.desktop /home/$USER/.config/autostart/.
 
 	doom sync
 }
