@@ -82,7 +82,10 @@ install_zsh() {
 	fi
 
 	echo "Installing zsh, oh-my-zsh and powerlevel10k..."
-	install_packages zsh
+	install_packages zsh zsh-autosuggestions zsh-syntax-highlighting
+
+	git clone https://github.com/zdharma-continuum/fast-syntax-highlighting /home/$USER/.oh-my-zsh/custom/plugins/
+	git clone --depth 1 -- https://github.com/marlonrichert/zsh-autocomplete.git /home/$USER/.oh-my-zsh/custom/plugins/plugins/zsh-autocomplete
 
 	$FILE=/home/$USER/.oh-my-zsh/
 	if [ -d "$FILE" ]; then
@@ -179,7 +182,8 @@ install_hyprland() {
 		sudo -u $USER -H sh -c "yay -S hyprland-git"
 	fi
 
-	install_packages sddm dunst pipewire wireplumber xdg-desktop-portal-hyprland polkit-kde-agent qt5-wayland qt6-wayland
+	install_packages sddm dunst pipewire wireplumber xdg-desktop-portal-hyprland
+	install_packages polkit-kde-agent qt5-wayland qt6-wayland gtk-layer-shell
 
 	echo "Installing eww..."
 	# eww
