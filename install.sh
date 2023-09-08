@@ -1,7 +1,7 @@
 #!/bin/sh
 
-SHORT=i:,h
-LONG=install:,help
+SHORT=i:,u:,h
+LONG=install:,user:,help
 OPTS=$(getopt --alternative --name install --options $SHORT --longoptions $LONG -- "$@")
 
 # Initialize flags
@@ -17,9 +17,16 @@ if [ "$VALID_ARGUMENTS" -eq 0 ]; then
 	usage
 fi
 
+USER=bonesaw
 # Process command line options
 while [ $# -gt 0 ]; do
 	case "$1" in
+	-u | --user)
+		shift
+		USER=$1
+		shift
+		echo "Installation for user $USER"
+		;;
 	-i | --install)
 		shift
 		;;
@@ -47,8 +54,6 @@ while [ $# -gt 0 ]; do
 	esac
 	shift
 done
-
-USER=$(whoami)
 
 # Function to display usage information
 usage() {
