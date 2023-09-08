@@ -48,7 +48,7 @@ while [ $# -gt 0 ]; do
 	shift
 done
 
-USER=$(who)
+USER=$(whoami)
 
 # Function to display usage information
 usage() {
