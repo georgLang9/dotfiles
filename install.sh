@@ -61,8 +61,8 @@ install_all() {
 	zsh
 	wezterm
 	neovim
-	hyprland
 	dEmacs
+	hyprland
 }
 
 # Install zsh + oh-my-zsh + powerlevel10k
@@ -113,20 +113,6 @@ install_neovim() {
 }
 
 #=====================================================
-# hyprland
-install_hyprland() {
-	echo "Installing hyprland..."
-	yay -S hyprland-git
-	pacman -S sddm dunst pipewire wireplumber xdg-desktop-portal-hyprland polkit-kde-agent qt5-wayland qt6-wayland
-
-	echo "Installing eww..."
-	# eww
-	git clone https://github.com/elkowar/eww
-	cd eww
-	cargo build --release --no-default-features --features=wayland
-}
-
-#=====================================================
 # doom emacs
 install_dEmacs() {
 	echo "Installing doom emacs"
@@ -139,6 +125,20 @@ install_dEmacs() {
 	cp ./emacs.desktop /home/$USER/.config/autostart/.
 
 	doom sync
+}
+
+#=====================================================
+# hyprland
+install_hyprland() {
+	echo "Installing hyprland..."
+	yay -S hyprland-git
+	pacman -S sddm dunst pipewire wireplumber xdg-desktop-portal-hyprland polkit-kde-agent qt5-wayland qt6-wayland
+
+	echo "Installing eww..."
+	# eww
+	git clone https://github.com/elkowar/eww
+	cd eww
+	cargo build --release --no-default-features --features=wayland
 }
 
 # Check and install selected components
