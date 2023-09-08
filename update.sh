@@ -7,6 +7,6 @@ cp ~/.zshrc .
 cp ~/.wezterm.lua .
 
 # update neovim
-cp -r ~/.config/nvim/* ./.config/
+cp -r ~/.config/nvim/* ./.config/nvim/
 
 # update autostart
