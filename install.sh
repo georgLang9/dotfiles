@@ -91,7 +91,6 @@ install_neovim() {
 	echo "Installing neovim..."
 	pacman -S neovim
 
-	echo "Installing lazyvim..."
 	# required
 	rm ~/.config/nvim{,.bak}
 
@@ -106,6 +105,8 @@ install_neovim() {
 	# for telescope:
 	pacman -S ripgrep fd
 
+	echo "Installing lazyvim..."
+	git clone https://github.com/LazyVim/starter ~/.config/nvim
 	cp -r ./.config/nvim/* ~/
 }
 
