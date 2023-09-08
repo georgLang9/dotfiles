@@ -157,6 +157,7 @@ install_dEmacs() {
 
   $FILE=/home/$USER/.config/autostart/emacs.desktop
   if [ -f "$FILE" ]; then
+    echo "autostart for emacs exists"
   else
 	  mkdir /home/$USER/.config/autostart/
 	  cp ./emacs.desktop /home/$USER/.config/autostart/.
