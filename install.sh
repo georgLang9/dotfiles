@@ -58,11 +58,11 @@ usage() {
 
 install_all() {
 	echo "Installing all..."
-	zsh
-	wezterm
-	neovim
-	dEmacs
-	hyprland
+	install_zsh
+	install_wezterm
+	install_neovim
+	install_dEmacs
+	install_hyprland
 }
 
 # Install zsh + oh-my-zsh + powerlevel10k
