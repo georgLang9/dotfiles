@@ -33,6 +33,7 @@ config.inactive_pane_hsb = {
 }
 
 -- Font
+config.font = wezterm.font("Fira Code Nerd Font")
 config.font_size = 13
 config.line_height = 1.2
 
