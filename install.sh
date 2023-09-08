@@ -157,5 +157,5 @@ if [ "$INSTALL_HYPRLAND" = true ]; then
 fi
 
 if [ "$INSTALL_DEMACS" = true ]; then
-	install_demacs
+	install_dEmacs
 fi
