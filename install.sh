@@ -73,6 +73,7 @@ install_zsh() {
     rustup update
   else 
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+    source "/home/$USER/.cargo/env"
   fi
 
 	echo "Installing zsh, oh-my-zsh and powerlevel10k..."
