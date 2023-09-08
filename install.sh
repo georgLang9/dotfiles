@@ -77,7 +77,7 @@ install_zsh() {
 	if test -f "$FILE"; then
 		rustup update
 	else
-		curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+		sudo -u $USER curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 		source "/home/$USER/.cargo/env"
 	fi
 
@@ -88,14 +88,14 @@ install_zsh() {
 	if [ -d "$FILE" ]; then
 		echo "oh-my-zsh already installed..."
 	else
-		sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+		sudo -u $USER sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 	fi
 
 	$FILE=/home/$USER/.oh-my-zsh/custom/themes/powerlevel10k
 	if [ -d "$FILE" ]; then
 		echo "powerlevel10k already installed..."
 	else
-		git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+		sudo -u $USER git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
 	fi
 
 	cp ./.zshrc /home/$USER/
@@ -185,7 +185,7 @@ install_hyprland() {
 	# eww
 	git clone https://github.com/elkowar/eww
 	cd eww
-	cargo build --release --no-default-features --features=wayland
+	sudo -u $USER cargo build --release --no-default-features --features=wayland
 }
 
 install_packages() {
