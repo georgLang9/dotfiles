@@ -185,7 +185,7 @@ install_hyprland() {
 	# eww
 	git clone https://github.com/elkowar/eww
 	cd eww
-	sudo -u $USER -H sh -c "cargo build --release --no-default-features --features=wayland"
+	sudo -u $USER -H sh -c "sudo cargo build --release --no-default-features --features=wayland"
 }
 
 install_packages() {
