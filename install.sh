@@ -84,14 +84,14 @@ install_zsh() {
 	echo "Installing zsh, oh-my-zsh and powerlevel10k..."
 	install_packages zsh
 
-	$FILE=/home/$USER/.oh-my-zsh
+	$FILE=/home/$USER/.oh-my-zsh/
 	if [ -d "$FILE" ]; then
 		echo "oh-my-zsh already installed..."
 	else
 		sudo -u $USER -H sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 	fi
 
-	$FILE=/home/$USER/.oh-my-zsh/custom/themes/powerlevel10k
+	$FILE=/home/$USER/.oh-my-zsh/custom/themes/powerlevel10k/
 	if [ -d "$FILE" ]; then
 		echo "powerlevel10k already installed..."
 	else
