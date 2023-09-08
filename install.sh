@@ -131,7 +131,7 @@ install_dEmacs() {
 # hyprland
 install_hyprland() {
 	echo "Installing hyprland..."
-	yay -S hyprland-git
+	# yay -S hyprland-git
 	pacman -S sddm dunst pipewire wireplumber xdg-desktop-portal-hyprland polkit-kde-agent qt5-wayland qt6-wayland
 
 	echo "Installing eww..."
