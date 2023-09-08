@@ -93,15 +93,15 @@ install_neovim() {
 
 	echo "Installing lazyvim..."
 	# required
-	mv ~/.config/nvim{,.bak}
+	rm ~/.config/nvim{,.bak}
 
 	# optional but recommended
-	mv ~/.local/share/nvim{,.bak}
-	mv ~/.local/state/nvim{,.bak}
-	mv ~/.cache/nvim{,.bak}
+	rm ~/.local/share/nvim{,.bak}
+	rm ~/.local/state/nvim{,.bak}
+	rm ~/.cache/nvim{,.bak}
 
 	rm -rf ~/.config/nvim/.git
-	sudo pacman -S lazygit
+	pacman -S lazygit
 
 	# for telescope:
 	pacman -S ripgrep fd
