@@ -110,13 +110,6 @@ install_neovim() {
 	echo "Installing neovim..."
   install_packages neovim
 
-	# required
-	rm /home/$USER/.config/nvim{,.bak}
-
-	# optional but recommended
-	rm /home/$USER/.local/share/nvim{,.bak}
-	rm /home/$USER/.local/state/nvim{,.bak}
-	rm /home/$USER/.cache/nvim{,.bak}
 
 	rm -rf /home/$USER/.config/nvim/.git
   install_packages lazygit
@@ -129,7 +122,17 @@ install_neovim() {
   if [ -d "$FILE" ]; then
     echo "lazyvim already installed..."
   else
+    # required
+    rm /home/$USER/.config/nvim{,.bak}
+
+    # optional but recommended
+    rm /home/$USER/.local/share/nvim{,.bak}
+    rm /home/$USER/.local/state/nvim{,.bak}
+    rm /home/$USER/.cache/nvim{,.bak}
+
     git clone https://github.com/LazyVim/starter /home/$USER/.config/nvim
+
+    rm -rf ~/.config/nvim/.git
   fi
 
   echo "updating config..."
