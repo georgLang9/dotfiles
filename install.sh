@@ -106,7 +106,7 @@ install_neovim() {
 	# for telescope:
 	pacman -S ripgrep fd
 
-	cp ./.config/nvim/* ~/
+	cp -r ./.config/nvim/* ~/
 }
 
 #=====================================================
