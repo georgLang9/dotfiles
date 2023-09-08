@@ -132,7 +132,10 @@ install_dEmacs() {
 	git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.config/emacs
 	~/.config/emacs/bin/doom install
 
-	cp ./emacs.desktop ~/.config/autostart/
+	mkdir ~/.config/autostart/
+	cp ./emacs.desktop ~/.config/autostart/.
+
+	doom sync
 }
 
 # Check and install selected components
