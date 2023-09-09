@@ -66,19 +66,26 @@ install_all() {
 # Install zsh + oh-my-zsh + powerlevel10k
 install_zsh() {
 	install_rust
-	echo "Installing zsh, oh-my-zsh and powerlevel10k..."
-	sudo pacman -S zsh zsh-autosuggestions zsh-syntax-highlighting
-
-	git clone https://github.com/zdharma-continuum/fast-syntax-highlighting ~/.oh-my-zsh/custom/plugins/
-	git clone --depth 1 -- https://github.com/marlonrichert/zsh-autocomplete.git ~/.oh-my-zsh/custom/plugins/plugins/zsh-autocomplete
+	echo "Installing zsh"
+	sudo pacman -S zsh
 
 	FILE=~/.oh-my-zsh/
 	if [ -d "$FILE" ]; then
 		echo "oh-my-zsh already installed..."
 	else
-		git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
+		echo "Installing oh-my-zsh..."
+		sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 	fi
 
+	# powerlevel10k
+	git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
+
+	# zsh plugins
+	sudo pacman -S zsh-autosuggestions zsh-syntax-highlighting
+	git clone https://github.com/zdharma-continuum/fast-syntax-highlighting ~/.oh-my-zsh/custom/plugins/
+	git clone --depth 1 -- https://github.com/marlonrichert/zsh-autocomplete.git ~/.oh-my-zsh/custom/plugins/plugins/zsh-autocomplete
+
+	# copy config
 	cp ./.zshrc ~/
 }
 
