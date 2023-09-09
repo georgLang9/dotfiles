@@ -83,7 +83,7 @@ install_zsh() {
 	# zsh plugins
 	sudo pacman -S zsh-autosuggestions zsh-syntax-highlighting
 	git clone https://github.com/zdharma-continuum/fast-syntax-highlighting ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting
-	git clone --depth 1 -- https://github.com/marlonrichert/zsh-autocomplete.git $ZSH_CUSTOM/plugins/zsh-autocomplete
+	git clone --depth 1 -- https://github.com/marlonrichert/zsh-autocomplete.git $ZSH_CUSTOM:-$HOME/plugins/zsh-autocomplete
 
 	# copy config
 	cp ./.zshrc ~/
