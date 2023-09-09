@@ -89,13 +89,13 @@ install_wezterm() {
 	sudo pacman -S wezterm
 
 	cp ./.wezterm.lua ~/
-}
 
-# Install nerd-fonts
-FONTS_DIR=~/Development/nerd-fonts
-git clone git@github.com:ryanoasis/nerd-fonts.git $FONTS_DIR
-as_user "$FONTS_DIR/install.sh"
-#=====================================================
+	# Install nerd-fonts
+	FONTS_DIR=~/Development/nerd-fonts
+	git clone git@github.com:ryanoasis/nerd-fonts.git $FONTS_DIR
+	as_user "$FONTS_DIR/install.sh"
+	#=====================================================
+}
 
 # Install neovim
 install_neovim() {
