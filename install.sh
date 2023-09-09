@@ -150,8 +150,11 @@ install_dEmacs() {
 install_hyprland() {
 	sudo pacman -Syu
 	install_rust
-	git clone git@github.com:ralismark/eww.git ~/Development/eww/
+
 	sudo pacman -S --needed gtk-layer-shell
+	git clone git@github.com:ralismark/eww.git ~/Development/eww/
+	git checkout tray-3
+
 	cd ~/Development/eww || exit
 	cargo build --release --no-default-features --features=wayland
 
@@ -193,6 +196,8 @@ install_hyprland() {
 	git clone git@github.com:end-4/dots-hyprland.git ~/Development/dots-hyprland
 	cd ~/Development/dots-hyprland
 	./guided_install.sh
+
+	alias eww="/home/bonesaw/Development/eww/eww"
 }
 
 install_rust() {
