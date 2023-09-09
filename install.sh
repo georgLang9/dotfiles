@@ -148,6 +148,7 @@ install_dEmacs() {
 #=====================================================
 # hyprland
 install_hyprland() {
+	install_rust
 	git clone git@github.com:ralismark/eww.git ~/Development/eww/
 	cd ~/Development/eww || exit
 	cargo build --release --no-default-features --features=wayland
