@@ -67,7 +67,7 @@ install_all() {
 install_zsh() {
 	install_rust
 	echo "Installing zsh"
-	sudo pacman -S zsh
+	sudo pacman -S --needed zsh
 
 	FILE=~/.oh-my-zsh/
 	if [ -d "$FILE" ]; then
@@ -81,7 +81,7 @@ install_zsh() {
 	git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
 
 	# zsh plugins
-	sudo pacman -S zsh-autosuggestions zsh-syntax-highlighting
+	sudo pacman -S --needed zsh-autosuggestions zsh-syntax-highlighting
 	git clone https://github.com/zdharma-continuum/fast-syntax-highlighting ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting
 	git clone --depth 1 -- https://github.com/marlonrichert/zsh-autocomplete.git $ZSH_CUSTOM:-$HOME/plugins/zsh-autocomplete
 
@@ -93,7 +93,7 @@ install_zsh() {
 # Install wezterm
 install_wezterm() {
 	echo "Installing wezterm..."
-	sudo pacman -S wezterm otf-droid-nerd ttf-jetbrains-mono-nerd ttf-firacode-nerd
+	sudo pacman -S --needed wezterm otf-droid-nerd ttf-jetbrains-mono-nerd ttf-firacode-nerd
 
 	# copy config
 	cp ./.wezterm.lua ~/
@@ -102,7 +102,7 @@ install_wezterm() {
 # Install neovim
 install_neovim() {
 	echo "Installing neovim..."
-	sudo pacman -S neovim lazygit ripgrep fd
+	sudo pacman -S --needed neovim lazygit ripgrep fd
 
 	FILE=~/.config/nvim/lua/
 	if [ -d "$FILE" ]; then
@@ -124,7 +124,7 @@ install_neovim() {
 # doom emacs
 install_dEmacs() {
 	echo "Installing doom emacs"
-	sudo pacman -S emacs
+	sudo pacman -S --needed emacs
 
 	FILE=~/.config/emacs/bin/doom
 	if [ -f "$FILE" ]; then
@@ -150,7 +150,7 @@ install_dEmacs() {
 install_hyprland() {
 	install_rust
 	git clone git@github.com:ralismark/eww.git ~/Development/eww/
-	sudo pacman -S gtk-layer-shell
+	sudo pacman -S --needed gtk-layer-shell
 	cd ~/Development/eww || exit
 	cargo build --release --no-default-features --features=wayland
 
@@ -160,17 +160,17 @@ install_hyprland() {
 	cd ~ || exit
 
 	# python dependancies
-	yay -S python-pywal python-desktop-entry-lib python-poetry python-build python-pillow
+	yay -S --needed python-pywal python-desktop-entry-lib python-poetry python-build python-pillow
 
 	# normal dependencies
-	sudo pacman -S bc blueberry bluez boost boost-libs coreutils curl \
+	sudo pacman -S --needed bc blueberry bluez boost boost-libs coreutils curl \
 		findutils fish fuzzel fzf gawk gnome-control-center ibus imagemagick \
 		libqalculate light networkmanager network-manager-applet nlohmann-json \
 		pavucontrol plasma-browser-integration playerctl procps ripgrep socat sox \
 		starship udev upower util-linux xorg-xrandr wget wireplumber yad
 
 	# aur packages
-	yay -S cava lexend-fonts-git geticons gojq gtklock gtklock-playerctl-module \
+	yay -S --needed cava lexend-fonts-git geticons gojq gtklock gtklock-playerctl-module \
 		gtklock-powerbar-module gtklock-userinfo-module hyprland-git \
 		python-material-color-utilities swww ttf-material-symbols-git wlogout
 
@@ -183,10 +183,10 @@ install_hyprland() {
 	sudo usermod -aG video "$(whoami)"
 
 	# Keyring authentication stuff
-	sudo pacman -S gnome-keyring polkit-gnome
+	sudo pacman -S --needed gnome-keyring polkit-gnome
 
 	# Utilities
-	sudo pacman -S tesseract cliphist grim slurp
+	sudo pacman -S --needed tesseract cliphist grim slurp
 
 	# Install dotfiles from https://github.com/end-4/dots-hyprland/tree/m3ww
 	git clone git@github.com:end-4/dots-hyprland.git ~/Development/dots-hyprland
@@ -195,7 +195,7 @@ install_hyprland() {
 
 install_rust() {
 	echo "Installing rust..."
-	if type "$rustup -V" >/dev/null; then
+	if type "rustc --version" >/dev/null; then
 		echo "Rust already installed..."
 	else
 		curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
