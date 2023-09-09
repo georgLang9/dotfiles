@@ -148,15 +148,13 @@ install_dEmacs() {
 #=====================================================
 # hyprland
 install_hyprland() {
-	git clone git@github.com:ralismark/eww.git ~/Apps/eww/
-	cd eww || exit
+	git clone git@github.com:ralismark/eww.git ~/Development/eww/
+	cd ~/Development/eww || exit
 	cargo build --release --no-default-features --features=wayland
 
 	# make eww runnable
 	cd target/releas || exit
 	chmod +x ./eww
-
-	./eww daemon
 	cd ~ || exit
 
 	# python dependancies
