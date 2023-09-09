@@ -59,7 +59,7 @@ install_all() {
 	install_zsh
 	install_wezterm
 	install_neovim
-	install_dEmacs
+	#install_dEmacs
 	install_hyprland
 }
 
@@ -93,44 +93,26 @@ install_zsh() {
 # Install wezterm
 install_wezterm() {
 	echo "Installing wezterm..."
-	sudo pacman -S wezterm
+	sudo pacman -S wezterm otf-droid-nerd ttf-jetbrains-mono-nerd ttf-firacode-nerd
 
+	# copy config
 	cp ./.wezterm.lua ~/
-
-	# Install nerd-fonts
-	FONTS_DIR=~/Development/nerd-fonts
-	git clone git@github.com:ryanoasis/nerd-fonts.git $FONTS_DIR
-	as_user "$FONTS_DIR/install.sh"
-	#=====================================================
 }
 
 # Install neovim
 install_neovim() {
 	echo "Installing neovim..."
-	sudo pacman -S neovim
+	sudo pacman -S neovim lazygit ripgrep fd
 
-	rm -rf ~/.config/nvim/.git
-	sudo pacman -S lazygit
-
-	# for telescope:
-	sudo pacman -S ripgrep fd
-
-	echo "Installing lazyvim..."
 	FILE=~/.config/nvim/lua/
 	if [ -d "$FILE" ]; then
 		echo "lazyvim already installed..."
 	else
-		#TODO: handle config before installation
-		# required
-		rm ~/.config/nvim{,.bak}
-
-		# optional but recommended
-		rm ~/.local/share/nvim{,.bak}
-		rm ~/.local/state/nvim{,.bak}
-		rm ~/.cache/nvim{,.bak}
-
+		# Install lazyvim
+		echo "Installing lazyvim..."
 		git clone https://github.com/LazyVim/starter ~/.config/nvim
 
+		# remove local git
 		rm -rf ~/.config/nvim/.git
 	fi
 
@@ -213,8 +195,7 @@ install_hyprland() {
 
 install_rust() {
 	echo "Installing rust..."
-	FILE=/usr/bin/rustup
-	if command -v rustup -V &>/dev/null; then
+	if ! type "$rustup -V" >/dev/null; then
 		rustup update
 	else
 		curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
