@@ -1,7 +1,7 @@
-#!/bin/sh
+#!/bin/bash
 
-SHORT=i:,u:,h
-LONG=install:,user:,help
+SHORT=i:,h
+LONG=install:,help
 OPTS=$(getopt --alternative --name install --options $SHORT --longoptions $LONG -- "$@")
 
 # Initialize flags
@@ -17,16 +17,9 @@ if [ "$VALID_ARGUMENTS" -eq 0 ]; then
 	usage
 fi
 
-USER=bonesaw
 # Process command line options
 while [ $# -gt 0 ]; do
 	case "$1" in
-	-u | --user)
-		shift
-		USER=$1
-		shift
-		echo "Installation for user $USER"
-		;;
 	-i | --install)
 		shift
 		;;
@@ -72,101 +65,92 @@ install_all() {
 
 # Install zsh + oh-my-zsh + powerlevel10k
 install_zsh() {
-	echo "Installing rust..."
-	$FILE=/usr/bin/rustup
-	if test -f "$FILE"; then
-		rustup update
-	else
-		sudo -u $USER -H sh -c 'curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh'
-		source "/home/$USER/.cargo/env"
-	fi
-
+	install_rust
 	echo "Installing zsh, oh-my-zsh and powerlevel10k..."
-	install_packages zsh zsh-autosuggestions zsh-syntax-highlighting
+	sudo pacman -S zsh zsh-autosuggestions zsh-syntax-highlighting
 
-	git clone https://github.com/zdharma-continuum/fast-syntax-highlighting /home/$USER/.oh-my-zsh/custom/plugins/
-	git clone --depth 1 -- https://github.com/marlonrichert/zsh-autocomplete.git /home/$USER/.oh-my-zsh/custom/plugins/plugins/zsh-autocomplete
+	git clone https://github.com/zdharma-continuum/fast-syntax-highlighting ~/.oh-my-zsh/custom/plugins/
+	git clone --depth 1 -- https://github.com/marlonrichert/zsh-autocomplete.git ~/.oh-my-zsh/custom/plugins/plugins/zsh-autocomplete
 
-	$FILE=/home/$USER/.oh-my-zsh/
+	FILE=~/.oh-my-zsh/
 	if [ -d "$FILE" ]; then
 		echo "oh-my-zsh already installed..."
 	else
-		sudo -u $USER -H sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+		git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
 	fi
 
-	$FILE=/home/$USER/.oh-my-zsh/custom/themes/powerlevel10k/
-	if [ -d "$FILE" ]; then
-		echo "powerlevel10k already installed..."
-	else
-		sudo -u $USER -H sh -c 'git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k'
-	fi
-
-	cp ./.zshrc /home/$USER/
+	cp ./.zshrc ~/
 }
 
 #=====================================================
 # Install wezterm
 install_wezterm() {
 	echo "Installing wezterm..."
-	install_packages wezterm
+	sudo pacman -S wezterm
 
-	cp ./.wezterm.lua /home/$USER/
+	cp ./.wezterm.lua ~/
 }
 
+# Install nerd-fonts
+FONTS_DIR=~/Development/nerd-fonts
+git clone git@github.com:ryanoasis/nerd-fonts.git $FONTS_DIR
+as_user "$FONTS_DIR/install.sh"
 #=====================================================
+
 # Install neovim
 install_neovim() {
 	echo "Installing neovim..."
-	install_packages neovim
+	sudo pacman -S neovim
 
-	rm -rf /home/$USER/.config/nvim/.git
-	install_packages lazygit
+	rm -rf ~/.config/nvim/.git
+	sudo pacman -S lazygit
 
 	# for telescope:
-	install_packages ripgrep fd
+	sudo pacman -S ripgrep fd
 
 	echo "Installing lazyvim..."
-	$FILE=/home/$USER/.config/nvim/lua/
+	FILE=~/.config/nvim/lua/
 	if [ -d "$FILE" ]; then
 		echo "lazyvim already installed..."
 	else
+		#TODO: handle config before installation
 		# required
-		rm /home/$USER/.config/nvim{,.bak}
+		rm ~/.config/nvim{,.bak}
 
 		# optional but recommended
-		rm /home/$USER/.local/share/nvim{,.bak}
-		rm /home/$USER/.local/state/nvim{,.bak}
-		rm /home/$USER/.cache/nvim{,.bak}
+		rm ~/.local/share/nvim{,.bak}
+		rm ~/.local/state/nvim{,.bak}
+		rm ~/.cache/nvim{,.bak}
 
-		git clone https://github.com/LazyVim/starter /home/$USER/.config/nvim
+		git clone https://github.com/LazyVim/starter ~/.config/nvim
 
 		rm -rf ~/.config/nvim/.git
 	fi
 
 	echo "updating config..."
-	cp -r ./.config/nvim/* /home/$USER/
+	cp -r ./.config/nvim/* ~/
 }
 
 #=====================================================
 # doom emacs
 install_dEmacs() {
 	echo "Installing doom emacs"
-	install_packages emacs
+	sudo pacman -S emacs
 
-	$FILE=/home/$USER/.config/emacs/bin/doom
+	FILE=~/.config/emacs/bin/doom
 	if [ -f "$FILE" ]; then
 		echo "doom emacs already installed..."
 	else
-		git clone --depth 1 https://github.com/doomemacs/doomemacs /home/$USER/.config/emacs
+		git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.config/emacs
 		$FILE install
 	fi
 
-	$FILE=/home/$USER/.config/autostart/emacs.desktop
+	FILE=~/.config/autostart/emacs.desktop
 	if [ -f "$FILE" ]; then
 		echo "autostart for emacs exists"
 	else
-		mkdir /home/$USER/.config/autostart/
-		cp ./emacs.desktop /home/$USER/.config/autostart/.
+		mkdir ~/.config/autostart/
+		cp ./emacs.desktop ~/.config/autostart/.
 	fi
 
 	doom sync
@@ -175,32 +159,60 @@ install_dEmacs() {
 #=====================================================
 # hyprland
 install_hyprland() {
-	echo "Installing hyprland..."
-	if pacman -Qs hyprland-git >/dev/null; then
-		echo "hyprland-git is already installed..."
-	else
-		sudo -u $USER -H sh -c "yay -S hyprland-git"
-	fi
+	git clone git@github.com:ralismark/eww.git ~/Apps/eww/
+	cd eww || exit
+	cargo build --release --no-default-features --features=wayland
 
-	install_packages sddm dunst pipewire wireplumber xdg-desktop-portal-hyprland
-	install_packages polkit-kde-agent qt5-wayland qt6-wayland gtk-layer-shell
+	# make eww runnable
+	cd target/releas || exit
+	chmod +x ./eww
 
-	echo "Installing eww..."
-	# eww
-	git clone https://github.com/elkowar/eww
-	cd eww
-	sudo -u $USER -H sh -c "sudo cargo build --release --no-default-features --features=wayland"
+	./eww daemon
+	cd ~ || exit
+
+	# python dependancies
+	yay -S python-pywal python-desktop-entry-lib python-poetry python-build python-pillow
+
+	# normal dependencies
+	sudo pacman -S bc blueberry bluez boost boost-libs coreutils curl \
+		findutils fish fuzzel fzf gawk gnome-control-center ibus imagemagick \
+		libqalculate light networkmanager network-manager-applet nlohmann-json \
+		pavucontrol plasma-browser-integration playerctl procps ripgrep socat sox \
+		starship udev upower util-linux xorg-xrandr wget wireplumber yad
+
+	# aur packages
+	yay -S cava lexend-fonts-git geticons gojq gtklock gtklock-playerctl-module \
+		gtklock-powerbar-module gtklock-userinfo-module hyprland-git \
+		python-material-color-utilities swww ttf-material-symbols-git wlogout
+
+	echo "Get the following extension: https://addons.mozilla.org/en-US/firefox/addon/plasma-integration/"
+	echo "Continue when you got the extension"
+	echo "Press any key to continue..."
+	read -n 1 -s -r -p "Press any key to continue"
+
+	# for brightness control
+	sudo usermod -aG video "$(whoami)"
+
+	# Keyring authentication stuff
+	sudo pacman -S gnome-keyring polkit-gnome
+
+	# Utilities
+	sudo pacman -S tesseract cliphist grim slurp
+
+	# Install dotfiles from https://github.com/end-4/dots-hyprland/tree/m3ww
+	git clone git@github.com:end-4/dots-hyprland.git ~/Development/dots-hyprland
+	~/Development/dots-hyprland/guided_install.sh
 }
 
-install_packages() {
-	while [ $# -gt 0 ]; do
-		if pacman -Qs $1 >/dev/null; then
-			echo "$1 is already installed..."
-		else
-			pacman -S $1
-		fi
-		shift
-	done
+install_rust() {
+	echo "Installing rust..."
+	FILE=/usr/bin/rustup
+	if command -v rustup -V &>/dev/null; then
+		rustup update
+	else
+		curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+		source "$HOME/.cargo/env"
+	fi
 }
 
 # Check and install selected components
