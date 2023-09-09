@@ -150,9 +150,9 @@ install_dEmacs() {
 install_hyprland() {
 	install_rust
 	git clone git@github.com:ralismark/eww.git ~/Development/eww/
+	sudo pacman -S gtk-layer-shell
 	cd ~/Development/eww || exit
 	cargo build --release --no-default-features --features=wayland
-	sudo pacman -S gtk-layer-shell
 
 	# make eww runnable
 	cd target/releas || exit
