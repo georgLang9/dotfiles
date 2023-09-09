@@ -148,6 +148,7 @@ install_dEmacs() {
 #=====================================================
 # hyprland
 install_hyprland() {
+	sudo pacman -Syu
 	install_rust
 	git clone git@github.com:ralismark/eww.git ~/Development/eww/
 	sudo pacman -S --needed gtk-layer-shell
