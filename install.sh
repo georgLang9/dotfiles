@@ -190,7 +190,8 @@ install_hyprland() {
 
 	# Install dotfiles from https://github.com/end-4/dots-hyprland/tree/m3ww
 	git clone git@github.com:end-4/dots-hyprland.git ~/Development/dots-hyprland
-	~/Development/dots-hyprland/guided_install.sh
+	cd ~/Development/dots-hyprland
+	./guided_install.sh
 }
 
 install_rust() {
