@@ -81,7 +81,8 @@ install_zsh() {
 	git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
 
 	# zsh plugins
-	sudo pacman -S --needed zsh-autosuggestions zsh-syntax-highlighting
+	git clone https://github.com/zsh-users/zsh-autosuggestions.git "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
+	git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
 	git clone https://github.com/zdharma-continuum/fast-syntax-highlighting "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting"
 	git clone --depth 1 -- https://github.com/marlonrichert/zsh-autocomplete.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom/}plugins/zsh-autocomplete"
 
@@ -181,8 +182,7 @@ install_hyprland() {
 
 	echo "Get the following extension: https://addons.mozilla.org/en-US/firefox/addon/plasma-integration/"
 	echo "Continue when you got the extension"
-	echo "Press any key to continue..."
-	read -n 1 -s -r -p "Press any key to continue"
+	read -n 1 -s -r -p "Press any key to continue..."
 
 	# for brightness control
 	sudo usermod -aG video "$(whoami)"
@@ -195,7 +195,7 @@ install_hyprland() {
 
 	# Install dotfiles from https://github.com/end-4/dots-hyprland/tree/m3ww
 	git clone git@github.com:end-4/dots-hyprland.git ~/Development/dots-hyprland
-	cd ~/Development/dots-hyprland
+	cd ~/Development/dots-hyprland || exit
 	./guided_install.sh
 
 }
