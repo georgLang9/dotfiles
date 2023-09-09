@@ -155,7 +155,7 @@ install_hyprland() {
 	cargo build --release --no-default-features --features=wayland
 
 	# make eww runnable
-	cd target/releas || exit
+	cd target/release || exit
 	chmod +x ./eww
 	cd ~ || exit
 
