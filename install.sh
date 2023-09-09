@@ -161,6 +161,7 @@ install_hyprland() {
 	# make eww runnable
 	cd target/release || exit
 	chmod +x ./eww
+	alias eww="~/Development/eww/target/release/eww"
 	cd ~ || exit
 
 	# python dependancies
@@ -197,7 +198,6 @@ install_hyprland() {
 	cd ~/Development/dots-hyprland
 	./guided_install.sh
 
-	alias eww="/home/bonesaw/Development/eww/eww"
 }
 
 install_rust() {
