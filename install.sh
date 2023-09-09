@@ -152,6 +152,7 @@ install_hyprland() {
 	git clone git@github.com:ralismark/eww.git ~/Development/eww/
 	cd ~/Development/eww || exit
 	cargo build --release --no-default-features --features=wayland
+	sudo pacman -S gtk-layer-shell
 
 	# make eww runnable
 	cd target/releas || exit
@@ -195,7 +196,7 @@ install_hyprland() {
 install_rust() {
 	echo "Installing rust..."
 	if type "$rustup -V" >/dev/null; then
-		rustup update
+		echo "Rust already installed..."
 	else
 		curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 		source "$HOME/.cargo/env"
