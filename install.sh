@@ -152,9 +152,13 @@ install_hyprland() {
 	sudo pacman -Syu
 	install_rust
 
-	sudo pacman -S --needed gtk-layer-shell
+	# hyprland and utilities
+	yay -S --needed hyprland-git sddm-git
+	sudo pacman -S --needed dunst pipewire wireplumber \
+		xdg-desktop-portal-hyprland polkit-kde-agent \
+		qt5-wayland qt6-wayland fuzzel
+
 	git clone git@github.com:ralismark/eww.git ~/Development/eww/
-	git checkout tray-3
 
 	cd ~/Development/eww || exit
 	cargo build --release --no-default-features --features=wayland
@@ -162,42 +166,11 @@ install_hyprland() {
 	# make eww runnable
 	cd target/release || exit
 	chmod +x ./eww
-	alias eww="~/Development/eww/target/release/eww"
+	cp ./eww /usr/local/bin/
 	cd ~ || exit
 
-	# python dependancies
-	yay -S --needed python-pywal python-desktop-entry-lib python-poetry python-build python-pillow
-
-	# normal dependencies
-	sudo pacman -S --needed bc blueberry bluez boost boost-libs coreutils curl \
-		findutils fish fuzzel fzf gawk gnome-control-center ibus imagemagick \
-		libqalculate light networkmanager network-manager-applet nlohmann-json \
-		pavucontrol plasma-browser-integration playerctl procps ripgrep socat sox \
-		starship udev upower util-linux xorg-xrandr wget wireplumber yad
-
-	# aur packages
-	yay -S --needed cava lexend-fonts-git geticons gojq gtklock gtklock-playerctl-module \
-		gtklock-powerbar-module gtklock-userinfo-module hyprland-git \
-		python-material-color-utilities swww ttf-material-symbols-git wlogout
-
-	echo "Get the following extension: https://addons.mozilla.org/en-US/firefox/addon/plasma-integration/"
-	echo "Continue when you got the extension"
-	read -n 1 -s -r -p "Press any key to continue..."
-
-	# for brightness control
-	sudo usermod -aG video "$(whoami)"
-
-	# Keyring authentication stuff
-	sudo pacman -S --needed gnome-keyring polkit-gnome
-
-	# Utilities
-	sudo pacman -S --needed tesseract cliphist grim slurp
-
-	# Install dotfiles from https://github.com/end-4/dots-hyprland/tree/m3ww
-	git clone git@github.com:end-4/dots-hyprland.git ~/Development/dots-hyprland
-	cd ~/Development/dots-hyprland || exit
-	./guided_install.sh
-
+	rm -rf ~/.config/hypr/
+	rm -rf ~/.config/eww/
 }
 
 install_rust() {
