@@ -40,6 +40,13 @@ return {
       opts = { style = "moon" },
     },
   },
+  { "joshdick/onedark.vim" },
+  { "nyoom-engineering/nyoom.nvim" },
+  {
+    "nyoom-engineering/oxocarbon.nvim",
+    background = "dark",
+  },
+  { "patstockwell/vim-monokai-tasty" },
   { "ellisonleao/gruvbox.nvim", priority = 1000 },
   { "rktjmp/lush.nvim", priority = 1000 },
   { "rebelot/kanagawa.nvim", priority = 1000 },
@@ -48,7 +55,7 @@ return {
   {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "tokyonight",
+      colorscheme = "oxocarbon",
     },
   },
 }

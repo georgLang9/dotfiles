@@ -1,6 +1,8 @@
 -- Pull in the wezterm API
 local wezterm = require("wezterm")
 
+local act = wezterm.action
+
 -- This table will hold the configuration.
 local config = {}
 
@@ -18,13 +20,45 @@ end
 config.window_decorations = "RESIZE"
 
 config.window_frame = {
-	font = wezterm.font({ family = "Noto Sans", weight = "Regular" }),
+	font = wezterm.font({ family = "Liga SFMono Nerd Font", weight = "Regular" }),
 }
 
-config.window_background_opacity = 0.95
+config.enable_wayland = true
+config.window_close_confirmation = "NeverPrompt"
 
--- Color scheme
-config.color_scheme = "Tokyo Night"
+-- config.window_background_opacity = 0.80
+
+config.colors = {
+	foreground = "#dde1e6",
+	background = "#161616",
+	cursor_bg = "#f2f4f8",
+	cursor_fg = "#393939",
+	cursor_border = "#f2f4f8",
+	selection_fg = "#f2f4f8",
+	selection_bg = "#525252",
+	scrollbar_thumb = "#222222",
+	split = "#444444",
+	ansi = {
+		"#262626",
+		"#ff7eb6",
+		"#42be65",
+		"#82cfff",
+		"#33b1ff",
+		"#ee5396",
+		"#3ddbd9",
+		"#dde1e6",
+	},
+	brights = {
+		"#393939",
+		"#ff7eb6",
+		"#42be65",
+		"#82cfff",
+		"#33b1ff",
+		"#ee5396",
+		"#3ddbd9",
+		"#ffffff",
+	},
+}
 
 -- Inactive pane
 config.inactive_pane_hsb = {
@@ -33,12 +67,80 @@ config.inactive_pane_hsb = {
 }
 
 -- Font
-config.font = wezterm.font("Fira Code Nerd Font")
-config.font_size = 13
-config.line_height = 1.2
+-- Available Fonts:
+-- Liga SFMono Nerd Font
+-- DroidSansM Nerd Font
+-- JetBrains Nerd Font
+-- FiraCode Nerd Font
+-- MesloLGL Nerd Font
+-- Source Code Pro Semibold
+-- Symbols Nerd Font
+config.font = wezterm.font_with_fallback({
+	{ family = "Liga SFMono Nerd Font" },
+	{ family = "Hack Nerd Font" },
+	{ family = "Symbols Nerd Font" },
+})
+
+config.font_size = 14
+config.line_height = 1.0
 
 -- HOTKEYS
 -- ==================================================================
+
+config.keys = {
+	-- Move panel
+	{
+		key = "h",
+		mods = "CTRL|SHIFT",
+		action = act.ActivatePaneDirection("Left"),
+	},
+	{
+		key = "j",
+		mods = "CTRL|SHIFT",
+		action = act.ActivatePaneDirection("Down"),
+	},
+	{
+		key = "k",
+		mods = "CTRL|SHIFT",
+		action = act.ActivatePaneDirection("Up"),
+	},
+	{
+		key = "l",
+		mods = "CTRL|SHIFT",
+		action = act.ActivatePaneDirection("Right"),
+	},
+
+	-- Move tab
+	{
+		key = "h",
+		mods = "SUPER",
+		action = act.ActivateTabRelative(-1),
+	},
+	{
+		key = "l",
+		mods = "SUPER",
+		action = act.ActivateTabRelative(1),
+	},
+
+	-- Closes in the following order: 1. Pane, 2. Tab, 3. Window
+	{
+		key = "q",
+		mods = "SHIFT|CTRL|ALT",
+		action = wezterm.action.CloseCurrentPane({ confirm = false }),
+	},
+
+	-- Create new panel
+	{
+		key = "v",
+		mods = "CTRL|SHIFT|ALT",
+		action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }),
+	},
+	{
+		key = "h",
+		mods = "CTRL|SHIFT|ALT",
+		action = wezterm.action.SplitHorizontal({ domain = "CurrentPaneDomain" }),
+	},
+}
 
 -- ==================================================================
 

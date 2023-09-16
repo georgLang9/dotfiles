@@ -100,6 +100,19 @@ install_wezterm() {
 	cp ./.wezterm.lua ~/
 }
 
+#=====================================================
+# Install fonts
+install_fonts() {
+	echo "Installing fonts..."
+	sudo pacman -S --needed otf-droid-nerd ttf-jetbrains-mono-nerd ttf-firacode-nerd
+
+	# SFMono Nerd Font
+	git clone https://github.com/shaunsingh/SFMono-Nerd-Font-Ligaturized.git && cd SFMono-Nerd-Font-Ligaturized
+	cp *.otf ~/.local/share/fonts
+	cd ~/Development/home-config/       # go back to original folder
+	rm -rf SFMono-Nerd-Font-Ligaturized # cleanup
+}
+
 # Install neovim
 install_neovim() {
 	echo "Installing neovim..."
@@ -153,11 +166,21 @@ install_hyprland() {
 	install_rust
 
 	# hyprland and utilities
-	yay -S --needed hyprland-git sddm-git
 	sudo pacman -S --needed dunst pipewire wireplumber \
 		xdg-desktop-portal-hyprland polkit-kde-agent \
-		qt5-wayland qt6-wayland fuzzel
+		qt5-wayland qt6-wayland wlroots sddm
+	yay -S --needed gdb ninja gcc cmake meson libxcb xcb-proto \
+		xcb-util xcb-util-keysyms libxfixes libx11 libxcomposite \
+		xorg-xinput libxrender pixman wayland-protocols cairo \
+		pango seatd libxkbcommon xcb-util-wm xorg-xwayland \
+		libinput libliftoff libdisplay-info cpio
 
+	yay -S --needed tofi
+	git clone --recursive https://github.com/hyprwm/Hyprland ~/Apps/hyprland/
+	cd ~/Apps/hyprland
+	sudo make install
+
+	# eww
 	git clone git@github.com:ralismark/eww.git ~/Development/eww/
 
 	cd ~/Development/eww || exit
@@ -169,8 +192,12 @@ install_hyprland() {
 	cp ./eww /usr/local/bin/
 	cd ~ || exit
 
+	# delete old config
 	rm -rf ~/.config/hypr/
 	rm -rf ~/.config/eww/
+
+	cp -r ./.config/nvim/ ~/.config/nvim/
+	cp -r ./.config/eww/ ~/.config/eww/
 }
 
 install_rust() {
