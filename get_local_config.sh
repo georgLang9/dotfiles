@@ -4,7 +4,7 @@
 cp ~/.zshrc .
 
 # get local wezterm
-cp ~/.wezterm.lua .
+cp -r ~/.config/wezterm/* ./.config/wezterm/
 
 # get local neovim
 cp -r ~/.config/nvim/* ./.config/nvim/
@@ -15,5 +15,5 @@ cp -r ~/.config/hypr/* ./.config/hypr/
 # get local tofi
 cp -r ~/.config/tofi/* ./.config/tofi/
 
-# get local eww
-cp -r ~/.config/eww/* ./.config/eww/
+# get local waybar
+cp -r ~/.config/waybar/* ./.config/waybar/

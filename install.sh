@@ -13,6 +13,8 @@ INSTALL_HYPRLAND=false
 INSTALL_DEMACS=false
 VALID_ARGUMENTS=$#
 
+install_dir = $(pwd)
+
 if [ "$VALID_ARGUMENTS" -eq 0 ]; then
 	usage
 fi
@@ -94,10 +96,19 @@ install_zsh() {
 # Install wezterm
 install_wezterm() {
 	echo "Installing wezterm..."
-	sudo pacman -S --needed wezterm otf-droid-nerd ttf-jetbrains-mono-nerd ttf-firacode-nerd
+
+	#=====================================================
+	# Color themes
+
+	# Oxocarbon
+	mkdir -p $HOME/.config/wezterm/colors
+	cd $HOME/.config/wezterm/colors/
+	curl -O https://raw.githubusercontent.com/nyoom-engineering/oxocarbon-wezterm/main/oxocarbon-dark.toml
+	cd install_dir # Go back do install folder
 
 	# copy config
-	cp ./.wezterm.lua ~/
+	mkdir ~./.config/wezterm
+	cp ./.config/wezterm/* ~/.config/wezterm
 }
 
 #=====================================================
@@ -109,7 +120,8 @@ install_fonts() {
 	# SFMono Nerd Font
 	git clone https://github.com/shaunsingh/SFMono-Nerd-Font-Ligaturized.git && cd SFMono-Nerd-Font-Ligaturized
 	cp *.otf ~/.local/share/fonts
-	cd ~/Development/home-config/       # go back to original folder
+
+	cd install_dir
 	rm -rf SFMono-Nerd-Font-Ligaturized # cleanup
 }
 

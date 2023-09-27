@@ -39,7 +39,7 @@ unsetopt beep
 # DISABLE_AUTO_TITLE="true"
 
 # Uncomment the following line to enable command auto-correction.
-ENABLE_CORRECTION="true"
+# ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
 # You can also set it to another string to have that shown instead of the default red dots.
@@ -69,6 +69,7 @@ plugins=(
   zsh-syntax-highlighting
   fast-syntax-highlighting
   zsh-autocomplete
+  fzf
   z
   sudo
 )
@@ -79,7 +80,6 @@ source $ZSH/oh-my-zsh.sh
 
 # export MANPATH="/usr/local/man:$MANPATH"
 export PATH="$HOME/.config/emacs/bin:$PATH"
-export PATH="$PATH:~/Development/eww/target/release/eww"
 # export PATH="$Path:$HOME/Apps/hyprland/build/Hyprland"
 
 # Preferred editor for local and remote sessions

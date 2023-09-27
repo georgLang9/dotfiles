@@ -34,12 +34,12 @@ return {
         which_key = true,
       },
     },
-    {
-      "folke/tokyonight.nvim",
-      lazy = true,
-      opts = { style = "moon" },
-    },
   },
+  {
+    "folke/tokyonight.nvim",
+  },
+  { "sainnhe/everforest" },
+  { "EdenEast/nightfox.nvim" },
   { "joshdick/onedark.vim" },
   { "nyoom-engineering/nyoom.nvim" },
   {
@@ -55,7 +55,7 @@ return {
   {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "oxocarbon",
+      colorscheme = "tokyonight",
     },
   },
 }
