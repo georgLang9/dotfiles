@@ -7,7 +7,7 @@ local config = {}
 -- In newer versions of wezterm, use the config_builder which will
 -- help provide clearer error messages
 if wezterm.config_builder then
-	config = wezterm.config_builder()
+  config = wezterm.config_builder()
 end
 
 -- ==================================================================
@@ -30,6 +30,11 @@ font.apply_to_config(config)
 local keybindings = require("keybindings")
 keybindings.apply_to_config(config)
 -- ==================================================================
+local mux = wezterm.mux
+wezterm.on("gui-startup", function(cmd)
+  local tab, pane, window = mux.spawn_window(cmd or {})
+  window:gui_window():maximize()
+end)
 
 -- and finally, return the configuration to wezterm
 return config

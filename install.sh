@@ -9,11 +9,12 @@ INSTALL_ALL=false
 INSTALL_ZSH=false
 INSTALL_WEZTERM=false
 INSTALL_NEOVIM=false
+INSTALL_FONTS=false
 INSTALL_HYPRLAND=false
 INSTALL_DEMACS=false
 VALID_ARGUMENTS=$#
 
-install_dir = $(pwd)
+INSTALL_DIR = $(pwd)
 
 if [ "$VALID_ARGUMENTS" -eq 0 ]; then
 	usage
@@ -37,11 +38,11 @@ while [ $# -gt 0 ]; do
 	neovim)
 		INSTALL_NEOVIM=true
 		;;
+	fonts)
+		INSTALL_FONTS=true
+		;;
 	hyprland)
 		INSTALL_HYPRLAND=true
-		;;
-	dEmacs)
-		INSTALL_DEMACS=true
 		;;
 	all)
 		INSTALL_ALL=true
@@ -61,7 +62,7 @@ install_all() {
 	install_zsh
 	install_wezterm
 	install_neovim
-	#install_dEmacs
+	install_fonts
 	install_hyprland
 }
 
@@ -71,44 +72,42 @@ install_zsh() {
 	echo "Installing zsh"
 	sudo pacman -S --needed zsh
 
-	FILE=~/.oh-my-zsh/
-	if [ -d "$FILE" ]; then
-		echo "oh-my-zsh already installed..."
-	else
-		echo "Installing oh-my-zsh..."
-		sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-	fi
+	echo "Installing oh-my-zsh"
+	cp -r ./dotfiles/oh-my-zsh/ ~/.oh-my-zsh/
 
 	# powerlevel10k
+	echo "Installing powerlevel10k"
 	git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
 
 	# zsh plugins
-	git clone https://github.com/zsh-users/zsh-autosuggestions.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom/}plugins/zsh-autosuggestions"
-	git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom/}plugins/zsh-syntax-highlighting"
+	echo "Installing plugins..."
+	git clone https://github.com/zsh-users/zsh-autosuggestions.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom/}/plugins/zsh-autosuggestions"
+	git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom/}/plugins/zsh-syntax-highlighting"
 	git clone https://github.com/zdharma-continuum/fast-syntax-highlighting "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting"
-	git clone --depth 1 -- https://github.com/marlonrichert/zsh-autocomplete.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom/}plugins/zsh-autocomplete"
+	git clone --depth 1 -- https://github.com/marlonrichert/zsh-autocomplete.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom/}/plugins/zsh-autocomplete"
 
 	# copy config
-	cp ./.zshrc ~/
+	cp ./dotfiles/zshrc ~/.zshrc
 }
 
 #=====================================================
 # Install wezterm
 install_wezterm() {
 	echo "Installing wezterm..."
+	sudo pacman -S wezterm
 
 	#=====================================================
 	# Color themes
 
 	# Oxocarbon
+	mkdir -p $HOME/.config/wezterm
 	mkdir -p $HOME/.config/wezterm/colors
 	cd $HOME/.config/wezterm/colors/
 	curl -O https://raw.githubusercontent.com/nyoom-engineering/oxocarbon-wezterm/main/oxocarbon-dark.toml
-	cd install_dir # Go back do install folder
+	cd "$INSTALL_DIR" # Go back do install folder
 
 	# copy config
-	mkdir ~./.config/wezterm
-	cp ./.config/wezterm/* ~/.config/wezterm
+	cp -r ./.config/wezterm/ ~/.config/wezterm/
 }
 
 #=====================================================
@@ -119,9 +118,9 @@ install_fonts() {
 
 	# SFMono Nerd Font
 	git clone https://github.com/shaunsingh/SFMono-Nerd-Font-Ligaturized.git && cd SFMono-Nerd-Font-Ligaturized
-	cp *.otf ~/.local/share/fonts
+	cp -p *.otf ~/.local/share/fonts
 
-	cd install_dir
+	cd "$INSTALL_DIR"
 	rm -rf SFMono-Nerd-Font-Ligaturized # cleanup
 }
 
@@ -129,92 +128,41 @@ install_fonts() {
 install_neovim() {
 	echo "Installing neovim..."
 	sudo pacman -S --needed neovim lazygit ripgrep fd
+	echo "Done installing neovim"
 
-	FILE=~/.config/nvim/lua/
-	if [ -d "$FILE" ]; then
-		echo "lazyvim already installed..."
-	else
-		# Install lazyvim
-		echo "Installing lazyvim..."
-		git clone https://github.com/LazyVim/starter ~/.config/nvim
+	echo "Installing lazyvim distro..."
+	sudo rm -rf ~/.config/nvim/
+	git clone https://github.com/LazyVim/starter ~/.config/nvim
+	echo "Done installing lazyvim"
 
-		# remove local git
-		rm -rf ~/.config/nvim/.git
-	fi
+	# remove local git
+	echo "Remove .git folder in config..."
+	rm -rf ~/.config/nvim/.git
 
 	echo "updating config..."
-	cp -r ./.config/nvim/* ~/
-}
+	cp -r ./dotfiles/nvim ~/.config/nvim
 
-#=====================================================
-# doom emacs
-install_dEmacs() {
-	echo "Installing doom emacs"
-	sudo pacman -S --needed emacs
-
-	FILE=~/.config/emacs/bin/doom
-	if [ -f "$FILE" ]; then
-		echo "doom emacs already installed..."
-	else
-		git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.config/emacs
-		$FILE install
-	fi
-
-	FILE=~/.config/autostart/emacs.desktop
-	if [ -f "$FILE" ]; then
-		echo "autostart for emacs exists"
-	else
-		mkdir ~/.config/autostart/
-		cp ./emacs.desktop ~/.config/autostart/.
-	fi
-
-	doom sync
 }
 
 #=====================================================
 # hyprland
 install_hyprland() {
 	sudo pacman -Syu
-	install_rust
 
 	# hyprland and utilities
 	sudo pacman -S --needed dunst pipewire wireplumber \
 		xdg-desktop-portal-hyprland polkit-kde-agent \
-		qt5-wayland qt6-wayland wlroots sddm
-	yay -S --needed gdb ninja gcc cmake meson libxcb xcb-proto \
-		xcb-util xcb-util-keysyms libxfixes libx11 libxcomposite \
-		xorg-xinput libxrender pixman wayland-protocols cairo \
-		pango seatd libxkbcommon xcb-util-wm xorg-xwayland \
-		libinput libliftoff libdisplay-info cpio
+		qt5-wayland qt6-wayland wlroots sddm rofi
+	yay -S hyprland-git
 
-	yay -S --needed tofi
-	git clone --recursive https://github.com/hyprwm/Hyprland ~/Apps/hyprland/
-	cd ~/Apps/hyprland
-	sudo make install
-
-	# eww
-	git clone git@github.com:ralismark/eww.git ~/Development/eww/
-
-	cd ~/Development/eww || exit
-	cargo build --release --no-default-features --features=wayland
-
-	# make eww runnable
-	cd target/release || exit
-	chmod +x ./eww
-	cp ./eww /usr/local/bin/
-	cd ~ || exit
-
-	# delete old config
+	# replace old config with new one
 	rm -rf ~/.config/hypr/
-	rm -rf ~/.config/eww/
-
-	cp -r ./.config/nvim/ ~/.config/nvim/
-	cp -r ./.config/eww/ ~/.config/eww/
+	cp -r ./dotfiles//hypr/ ~/.config/hypr/
 }
 
 install_rust() {
 	echo "Installing rust..."
-	if command -v rustc --version &>/dev/null; then
+	if command -v rustup --version &>/dev/null; then
 		echo "Rust already installed..."
 	else
 		curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
@@ -237,6 +185,10 @@ fi
 
 if [ "$INSTALL_NEOVIM" = true ]; then
 	install_neovim
+fi
+
+if [ "$INSTALL_FONTS" = true ]; then
+	install_fonts
 fi
 
 if [ "$INSTALL_HYPRLAND" = true ]; then
